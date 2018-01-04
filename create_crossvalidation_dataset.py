@@ -4,6 +4,7 @@ import json
 from nltk.corpus import reuters
 from collections import defaultdict
 
+
 def prepare_data(corpus, min_category_docs):
 
     # Docs ID containers
@@ -35,6 +36,7 @@ def prepare_data(corpus, min_category_docs):
 
     return train_docs, test_docs
 
+
 def split_dataset_into_groups(train_docs, num_of_groups):
     dataset = defaultdict(lambda: defaultdict(list))
 
@@ -48,12 +50,9 @@ def split_dataset_into_groups(train_docs, num_of_groups):
             else:
                 rand_id = 0
 
-            print(rand_id, end=' ')
             dataset[group_iter%num_of_groups][category].append(train_docs[category][rand_id])
             del train_docs[category][rand_id]
             group_iter += 1
-
-        print('')
 
     return dataset
 
@@ -69,5 +68,3 @@ if __name__ == "__main__":
 
     with open('cross-validation_dataset.json', 'w') as f:
         json.dump(dict(train_docs=train_docs,test_docs=test_docs), f, indent=4)
-
-
