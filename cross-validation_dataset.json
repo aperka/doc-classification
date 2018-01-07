@@ -1,4 +1,5 @@
 {
+    "corpus": "reuters",
     "train_docs": {
         "0": {
             "acq": [

@@ -4,6 +4,7 @@ import json
 from nltk.corpus import reuters
 from collections import defaultdict
 
+corpuses = dict(reuters=reuters, other=None)
 
 def prepare_data(corpus, min_category_docs):
 
@@ -56,15 +57,59 @@ def split_dataset_into_groups(train_docs, num_of_groups):
 
     return dataset
 
+
+def load_dataset_from_file(path):
+    with open(path, 'r') as f:
+        dataset = json.load(f)
+    return dataset
+
+
+def cross_validation_get_data(dataset, case_number):
+
+    xvalid_group_ids = range(0, len(dataset['train_docs']))
+
+    if case_number not in xvalid_group_ids:
+        raise ValueError("Invalid cross-validation case number")
+
+    validation_docs = defaultdict(list)
+    training_docs = defaultdict(list)
+    categories = dataset['train_docs']['0'].keys()
+
+    for group_id in xvalid_group_ids:
+        for category in categories:
+            data = dataset['train_docs'][str(group_id)][category]
+            if case_number == group_id:
+                validation_docs[category] += data
+            else:
+                training_docs[category] += data
+
+    return training_docs, validation_docs
+
+
 if __name__ == "__main__":
-    #with open('pre.json', 'w') as f:
-    #    json.dump(prepare_data(reuters, 30), f, indent=4)
+    '''To create cross validation dataset run script with
+    args:
+        corpus_name
+        min_documents_in_category - minimum documents in category, categories with less docs will not exist in datast
+        num_of_cross_valid_groups - number of cross validation groups in dataset
+        file_path - it save dataset at this path
+        '''
+    import sys
 
-    #with open('pre.json', 'r') as f:
-    #    dataset = json.load(f)
+    if len(sys.argv) == 5:
+        corpus_name = sys.argv[1]
+        min_documents_in_category = sys.argv[2]
+        num_of_cross_valid_groups = sys.argv[3]
+        filename = sys.argv[4]
+    else:
+        corpus_name = 'reuters'
+        min_documents_in_category = 30
+        num_of_cross_valid_groups = 3
+        filename = 'cross-validation_dataset.json'
 
+    corpus = corpuses[corpus_name]
     train_docs, test_docs = prepare_data(reuters, 30)
     train_docs = split_dataset_into_groups(train_docs, 4)
 
-    with open('cross-validation_dataset.json', 'w') as f:
-        json.dump(dict(train_docs=train_docs,test_docs=test_docs), f, indent=4)
+    with open(filename, 'w') as f:
+        json.dump(dict(corpus=corpus_name ,train_docs=train_docs,test_docs=test_docs), f, indent=4)
