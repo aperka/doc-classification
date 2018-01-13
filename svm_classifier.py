@@ -10,7 +10,7 @@ class SvmClassifier(object):
         :param type: options: 'linear', 'poly', 'rbf', 'sigmoid', 'precomputed'
         """
 
-        self.classifier = OneVsRestClassifier(SVC(kernel=svm_type), *args, **kwargs)
+        self.classifier = OneVsRestClassifier(SVC(kernel=svm_type, *args, **kwargs))
 
     def fit(self, docs, labels):
         self.classifier.fit(docs, labels)
