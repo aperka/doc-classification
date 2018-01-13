@@ -37,6 +37,12 @@ def save_splitted_dataset(file_path, corpus_name, k):
 
 
 def get_dataset(file_path, cross_validation_case):
+    """
+
+    :param file_path:
+    :param cross_validation_case:
+    :return:
+    """
     with open(file_path, 'r') as f:
         dataset = json.load(f)
 
