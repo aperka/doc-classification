@@ -67,7 +67,7 @@ def get_dataset(file_path, cross_validation_case):
     # Transform multilabel labels
     mlb = MultiLabelBinarizer()
     train_bin_labels = mlb.fit_transform([corpus.categories(doc_id) for doc_id in train_docs_ids])
-    test_bin_labels = mlb.transform([corpus.categories(doc_id) for doc_id in train_docs_ids])
+    test_bin_labels = mlb.transform([corpus.categories(doc_id) for doc_id in test_docs])
     labels = list(mlb.classes_)
 
     return train_docs, train_bin_labels, test_docs, test_bin_labels, labels
