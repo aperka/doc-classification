@@ -35,10 +35,12 @@ def doc2vec_svm(train_docs, test_docs, train_bin_labels, test_bin_labels):
     evaluate(test_bin_labels, predictions)
 
 def doc2vec_nn(train_docs, test_docs, train_bin_labels, test_bin_labels):
-    nn = nn_create()
+    nn = nn_create(50)
     doc2vec_train(train_docs)
     train_data = doc2vec_train(train_docs)
     test_data = doc2vec_gen_test_data(test_docs)
+
+    #train_data , test_data = nn_scale_data(train_data, test_data)
 
     nn.fit(train_data, train_bin_labels)
     predictions = nn.predict(test_data)
@@ -60,7 +62,6 @@ if __name__ == '__main__':
         classif_type = '2'
 
 
-
     if (classif_type == '0'):
         print("RUN tf_idf_svm")
         func_name = "tf_idf_svm"
@@ -75,23 +76,3 @@ if __name__ == '__main__':
     for case in range(0, 1):
         train_docs, train_bin_labels, test_docs, test_bin_labels, labels = get_dataset('reuters_dataset.json', case)
         locals()[func_name](train_docs, test_docs, train_bin_labels, test_bin_labels)
-    '''
-    #----------------------------------------TF_IDF----------------------------------------------
-        vectorised_train_documents, vectorised_test_documents = tf_idf(train_docs, test_docs)
-
-
-        svm.fit(vectorised_train_documents, train_bin_labels)
-        predictions = svm.predict(vectorised_test_documents)
-
-        evaluate(test_bin_labels, predictions)
-    
-#-------------------------------------DOC2VEC--------------------------------------------------
-    doc2vec_train(train_docs)
-    train_data = doc2vec_train(train_docs)
-    test_data = doc2vec_gen_test_data(test_docs)
-
-    svm.fit(train_data, train_bin_labels)
-    predictions = svm.predict(test_data)
-
-    evaluate(test_bin_labels, predictions)
-    '''
