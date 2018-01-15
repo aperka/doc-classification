@@ -1,10 +1,12 @@
 from random import randint
 import json
 from nltk.corpus import reuters
+from nltk.corpus import gutenberg
+from nltk.corpus import brown
 from sklearn.preprocessing import MultiLabelBinarizer
 
 
-corpuses = dict(reuters=reuters, other=None)
+corpuses = dict(reuters=reuters, gutenberg=gutenberg, brown=brown, other=None)
 
 def save_splitted_dataset(file_path, corpus_name, k):
     """
@@ -15,9 +17,12 @@ def save_splitted_dataset(file_path, corpus_name, k):
     """
     corpus = corpuses[corpus_name]
     documents = corpus.fileids()
-    train_docs_ids = list(filter(lambda doc: doc.startswith("train"), documents))
-    test_docs_ids = list(filter(lambda doc: doc.startswith("test"), documents))
-
+    if (corpus_name == reuters):
+        train_docs_ids = list(filter( lambda doc: doc.startswith("train"), documents))
+        test_docs_ids = list(filter(lambda doc: doc.startswith("test"), documents))
+    else:
+        train_docs_ids = documents
+        test_docs_ids = []
     groups = list([] for x in range(k))
 
     while len(train_docs_ids):
@@ -75,14 +80,21 @@ def get_dataset(file_path, cross_validation_case):
 if __name__ == "__main__":
     import sys
 
+
+    import nltk
+    nltk.download('gutenberg')
+    nltk.download('brown')
+
     if len(sys.argv) == 4:
         corpus_name = sys.argv[1]
-        num_of_cross_valid_groups = sys.argv[2]
+        num_of_cross_valid_groups = int(sys.argv[2])
         file_path = sys.argv[3]
     else:
         print('Loading default configuration')
         corpus_name = 'reuters'
         num_of_cross_valid_groups = 4
         file_path = 'reuters_dataset.json'
+
+
 
     save_splitted_dataset(file_path, corpus_name, num_of_cross_valid_groups)

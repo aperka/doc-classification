@@ -35,7 +35,7 @@ def doc2vec_svm(train_docs, test_docs, train_bin_labels, test_bin_labels):
     evaluate(test_bin_labels, predictions)
 
 def doc2vec_nn(train_docs, test_docs, train_bin_labels, test_bin_labels):
-    nn = nn_create(50)
+    nn = nn_create()
     doc2vec_train(train_docs)
     train_data = doc2vec_train(train_docs)
     test_data = doc2vec_gen_test_data(test_docs)
@@ -58,8 +58,10 @@ if __name__ == '__main__':
 
     if len(sys.argv) == 2:
         classif_type = sys.argv[1]
+        dataset = sys.argv[2]
     else:
         classif_type = '2'
+        dataset = 'reuters_dataset.json'
 
 
     if (classif_type == '0'):
@@ -74,5 +76,5 @@ if __name__ == '__main__':
 
 
     for case in range(0, 1):
-        train_docs, train_bin_labels, test_docs, test_bin_labels, labels = get_dataset('reuters_dataset.json', case)
+        train_docs, train_bin_labels, test_docs, test_bin_labels, labels = get_dataset(dataset, case)
         locals()[func_name](train_docs, test_docs, train_bin_labels, test_bin_labels)
