@@ -36,7 +36,7 @@ def classify(classifier, train_data, test_data, train_bin_labels, test_bin_label
         if not isinstance(train_data, list):
             train_data = train_data.toarray().tolist()
         if not isinstance(test_data, list):
-            train_data = csr_matrix.toarray().tolist()
+            train_data = test_data.toarray().tolist()
         print('NN Training and prediction')
         predictions = nn_run(train_data, test_data, train_bin_labels, test_bin_labels, True)
 
@@ -86,7 +86,7 @@ if __name__ == '__main__':
         feature_extraction = sys.argv[2] # 'tf_idf' or'doc2vec' or 'tf_idf_doc2vec'
         dataset_json = sys.argv[3]
     else:
-        classifier_type = 'svm'  # 'svm' or 'nn'
+        classifier_type = 'nn'  # 'svm' or 'nn'
         feature_extraction = 'tf_idf_doc2vec' # 'tf_idf' or'doc2vec' or 'tf_idf_doc2vec'
         dataset_json = 'reuters_dataset.json'
 
