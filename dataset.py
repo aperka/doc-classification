@@ -4,7 +4,7 @@ from nltk.corpus import reuters
 from nltk.corpus import gutenberg
 from nltk.corpus import brown
 from sklearn.preprocessing import MultiLabelBinarizer
-
+import re
 
 corpuses = dict(reuters=reuters, gutenberg=gutenberg, brown=brown, other=None)
 
@@ -111,6 +111,7 @@ if __name__ == "__main__":
 
 
     import nltk
+    nltk.download('reuters')
     nltk.download('gutenberg')
     nltk.download('brown')
 
@@ -123,7 +124,6 @@ if __name__ == "__main__":
         corpus_name = 'reuters'
         num_of_cross_valid_groups = 4
         file_path = 'reuters_dataset.json'
-
 
 
     save_splitted_dataset(file_path, corpus_name, num_of_cross_valid_groups)
