@@ -7,7 +7,7 @@ doc2vec_model_location = 'doc2vec-model.bin'
 doc2vec_dimensions = 150
 
 
-def doc2vec_train(train_docs, train_bin_labels):
+def doc2vec_train(train_docs):
     taggedDocuments = [TaggedDocument(words=word_tokenize(train_docs[i]), tags=[i]) for i in range(len(train_docs))]
     shuffle(taggedDocuments)
     # Create and train the doc2vec model
