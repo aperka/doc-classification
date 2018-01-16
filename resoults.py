@@ -35,26 +35,23 @@ def doc2vec_svm(train_docs, test_docs, train_bin_labels, test_bin_labels):
     evaluate(test_bin_labels, predictions)
 
 def doc2vec_nn(train_docs, test_docs, train_bin_labels, test_bin_labels):
-    nn = nn_create()
     doc2vec_train(train_docs)
     train_data = doc2vec_train(train_docs)
     test_data = doc2vec_gen_test_data(test_docs)
-
-    #train_data , test_data = nn_scale_data(train_data, test_data)
-
-    nn.fit(train_data, train_bin_labels)
-    predictions = nn.predict(test_data)
-
-    evaluate(test_bin_labels, predictions)
+    nn_run(train_data, test_data, train_bin_labels, test_bin_labels, True)
 
 if __name__ == '__main__':
     import sys
+    import nltk
+    nltk.download('stopwords')
+    nltk.download('punkt')
     from dataset import get_dataset
     from tf_idf import tf_idf
     from svm_classifier import SvmClassifier
-    from neural_network import nn_scale_data, nn_create
+    from neural_network import nn_run
 
     from doc2vec import doc2vec_train, doc2vec_gen_test_data
+
 
     if len(sys.argv) == 2:
         classif_type = sys.argv[1]
@@ -75,6 +72,6 @@ if __name__ == '__main__':
         func_name = "doc2vec_nn"
 
 
-    for case in range(0, 1):
+    for case in range(1, 5):
         train_docs, train_bin_labels, test_docs, test_bin_labels, labels = get_dataset(dataset, case)
         locals()[func_name](train_docs, test_docs, train_bin_labels, test_bin_labels)
