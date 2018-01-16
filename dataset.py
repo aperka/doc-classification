@@ -8,6 +8,35 @@ from sklearn.preprocessing import MultiLabelBinarizer
 
 corpuses = dict(reuters=reuters, gutenberg=gutenberg, brown=brown, other=None)
 
+def create_fasttext_file(inpiut_file_path, output_file_path, corpus_name, cross_validation_case=0):
+    with open(file_path, 'r') as f:
+        dataset = json.load(f)
+
+    corpus = corpuses[dataset['corpus']]
+
+    train_docs_ids = []
+    test_docs_ids = []
+
+    # if cross_validation_case is 0 it returns default train / test docs (only for reuters)
+    if cross_validation_case == 0:
+        test_docs_ids = dataset['validation']
+
+    for count, group in enumerate(dataset['groups']):
+        if count == cross_validation_case - 1:
+            test_docs_ids += group
+        else:
+            train_docs_ids += group
+
+    f = open(output_file_path, 'w')
+    for doc_id in train_docs_ids:
+        fastext_line = ""
+        for category in corpus.categories(doc_id):
+            fastext_line += '__label__{} '.format(category)
+        fastext_line += re.sub('[^0-9a-zA-Z]+', ' ', corpus.raw(doc_id).strip())
+
+        f.write(fastext_line.lower()+'\n')
+    f.close()
+
 def save_splitted_dataset(file_path, corpus_name, k):
     """
 
