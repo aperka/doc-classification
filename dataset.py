@@ -104,6 +104,9 @@ def get_dataset(file_path, cross_validation_case):
 if __name__ == "__main__":
     import sys
 
+    import nltk
+    #nltk.download('brown')
+
     if len(sys.argv) == 4:
         corpus_name = sys.argv[1]
         num_of_cross_valid_groups = sys.argv[2]
@@ -111,7 +114,7 @@ if __name__ == "__main__":
     else:
         print('Loading default configuration')
         corpus_name = 'reuters'
-        num_of_cross_valid_groups = 4
+        num_of_cross_valid_groups = 10
         file_path = 'reuters_dataset.json'
 
     save_splitted_dataset(file_path, corpus_name, num_of_cross_valid_groups)

@@ -80,6 +80,6 @@ if __name__ == '__main__':
         func_name = "tf_idf_nn"
 
 
-    for case in range(1, 5):
+    for case in range(1, 11):
         train_docs, train_bin_labels, test_docs, test_bin_labels, labels = get_dataset(dataset, case)
         locals()[func_name](train_docs, test_docs, train_bin_labels, test_bin_labels)
