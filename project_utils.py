@@ -18,8 +18,8 @@ def tokenize(text):
 
 
 def evaluate(test_labels, predictions, description=None):
-    for i in enumerate(test_labels):
-        print(accuracy_score(test_labels[i], predictions[i], normalize=True))
+    #for i in enumerate(test_labels):
+    #    print(accuracy_score(test_labels[i], predictions[i], normalize=True))
 
     precision = precision_score(test_labels, predictions, average='micro')
     recall = recall_score(test_labels, predictions, average='micro')
