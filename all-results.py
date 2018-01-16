@@ -21,7 +21,7 @@ def classify(classifier, train_data, test_data, train_bin_labels, test_bin_label
         if isinstance(train_data, list):
             train_data = csr_matrix(train_data)
         if isinstance(test_data, list):
-            train_data = csr_matrix(test_data)
+            test_data = csr_matrix(test_data)
 
         print('Linear SVM (SVC) Training')
         svm = SvmClassifier('linear')
@@ -36,7 +36,7 @@ def classify(classifier, train_data, test_data, train_bin_labels, test_bin_label
         if not isinstance(train_data, list):
             train_data = train_data.toarray().tolist()
         if not isinstance(test_data, list):
-            train_data = test_data.toarray().tolist()
+            test_data = test_data.toarray().tolist()
         print('NN Training and prediction')
         predictions = nn_run(train_data, test_data, train_bin_labels, test_bin_labels, True)
 
