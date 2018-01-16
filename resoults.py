@@ -40,6 +40,12 @@ def doc2vec_nn(train_docs, test_docs, train_bin_labels, test_bin_labels):
     test_data = doc2vec_gen_test_data(test_docs)
     nn_run(train_data, test_data, train_bin_labels, test_bin_labels, True)
 
+def tf_idf_nn(train_docs, test_docs, train_bin_labels, test_bin_labels):
+    vectorised_train_documents, vectorised_test_documents = tf_idf(train_docs, test_docs)
+    train_data = vectorised_train_documents.toarray().tolist()
+    test_data = vectorised_test_documents.toarray().tolist()
+    nn_run(train_data, test_data, train_bin_labels, test_bin_labels, True)
+
 if __name__ == '__main__':
     import sys
     import nltk
@@ -57,7 +63,7 @@ if __name__ == '__main__':
         classif_type = sys.argv[1]
         dataset = sys.argv[2]
     else:
-        classif_type = '2'
+        classif_type = '3'
         dataset = 'reuters_dataset.json'
 
 
@@ -70,6 +76,9 @@ if __name__ == '__main__':
     if (classif_type == '2'):
         print("RUN doc2vec_nn")
         func_name = "doc2vec_nn"
+    if (classif_type == '3'):
+        print("RUN tf_idf_nn")
+        func_name = "tf_idf_nn"
 
 
     for case in range(1, 5):
