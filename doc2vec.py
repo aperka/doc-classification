@@ -24,7 +24,7 @@ def doc2vec_predict(test_docs):
     doc2vec = Doc2Vec.load(doc2vec_model_location)
 
     # Convert test_doc to doc vectors
-    test_data = [doc2vec.infer_vector(word_tokenize(doc)) for doc in test_docs]
+    return [doc2vec.infer_vector(word_tokenize(doc)) for doc in test_docs]
 
     '''
     # Initialize the neural network
