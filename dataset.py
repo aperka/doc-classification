@@ -111,7 +111,7 @@ def get_dataset(file_path, cross_validation_case):
     test_bin_labels = mlb.transform([set(corpus.categories(doc_id)) & set(mlb.classes_) for doc_id in test_docs_ids])
     labels = list(mlb.classes_)
 
-    return train_docs, train_bin_labels, test_docs, test_bin_labels, labels
+    return train_docs, train_bin_labels, test_docs, test_bin_labels, labels, train_docs_ids
 
 if __name__ == "__main__":
     import sys
