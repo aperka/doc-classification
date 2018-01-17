@@ -64,7 +64,7 @@ def nn_run(train_data, test_data, train_bin_labels, test_bin_labels, plot_epoche
 
         nn.fit(train_data, train_bin_labels)
         predictions = nn.predict(test_data)
-        evaluate(test_bin_labels, predictions)
+    evaluate(test_bin_labels, predictions)
 
 
 

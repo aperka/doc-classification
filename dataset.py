@@ -1,10 +1,13 @@
 from random import randint
 import json
+import re
+from nltk.corpus import brown
+from nltk.corpus import movie_reviews
 from nltk.corpus import reuters
 from sklearn.preprocessing import MultiLabelBinarizer
 
 
-corpuses = dict(reuters=reuters, other=None)
+corpuses = dict(reuters=reuters, brown=brown, movie_reviews=movie_reviews, other=None)
 
 def create_fasttext_file(inpiut_file_path, output_file_path, corpus_name, cross_validation_case=0):
     with open(file_path, 'r') as f:
@@ -44,8 +47,17 @@ def save_splitted_dataset(file_path, corpus_name, k):
     """
     corpus = corpuses[corpus_name]
     documents = corpus.fileids()
-    train_docs_ids = list(filter(lambda doc: doc.startswith("train"), documents))
-    test_docs_ids = list(filter(lambda doc: doc.startswith("test"), documents))
+
+    print("corpus type:")
+    print(type(corpus))
+
+    if (corpus_name == reuters):
+        train_docs_ids = list(filter(lambda doc: doc.startswith("train"), documents))
+        test_docs_ids = list(filter(lambda doc: doc.startswith("test"), documents))
+    else:
+        train_docs_ids = documents
+        test_docs_ids = []
+
 
     groups = list([] for x in range(k))
 
@@ -106,15 +118,16 @@ if __name__ == "__main__":
 
     import nltk
     #nltk.download('brown')
+    nltk.download('movie_reviews')
 
     if len(sys.argv) == 4:
         corpus_name = sys.argv[1]
-        num_of_cross_valid_groups = sys.argv[2]
+        num_of_cross_valid_groups = int(sys.argv[2])
         file_path = sys.argv[3]
     else:
         print('Loading default configuration')
-        corpus_name = 'reuters'
-        num_of_cross_valid_groups = 10
-        file_path = 'reuters_dataset.json'
+        corpus_name = 'movie_reviews'
+        num_of_cross_valid_groups = 4
+        file_path = 'movie_reviews_dataset.json'
 
     save_splitted_dataset(file_path, corpus_name, num_of_cross_valid_groups)
