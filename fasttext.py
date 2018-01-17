@@ -47,12 +47,12 @@ def get_vectors(model, data):
     vector = []
     for i, doc in enumerate(data):
         print i
-        doc_emb = np.array()
+        doc_emb = []
         for j, word in enumerate(tokenize(doc)):
             try:
-                doc_emb = np.vstack(doc_emb, model.word_vec(word))
+                doc_emb.append(model.word_vec(word))
             except:
                 pass
-        vector.append(doc.mean(axis=0).tolist())
+        vector.append(np.array(doc_emb).mean(axis=0).tolist())
 
     return vector
