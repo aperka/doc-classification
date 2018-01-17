@@ -38,7 +38,7 @@ def classify(classifier, train_data, test_data, train_bin_labels, test_bin_label
         if not isinstance(test_data, list):
             test_data = test_data.toarray().tolist()
         print('NN Training and prediction')
-        predictions = nn_run(train_data, test_data, train_bin_labels, test_bin_labels, True)
+        predictions = nn_run(train_data, test_data, train_bin_labels, test_bin_labels, plot_epoches=False)
 
         evaluate(predictions, test_bin_labels)
 
@@ -91,4 +91,3 @@ if __name__ == '__main__':
         dataset_json = 'reuters_dataset.json'
 
     test(classifier_type, feature_extraction, dataset_json)
-
