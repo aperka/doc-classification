@@ -6,13 +6,13 @@ from nltk.corpus import reuters
 import nltk
 from dataset import get_dataset
 from project_utils import tokenize
+import numpy as np
 
 model_path = 'fasttext-model-movie.bin'
 
 def get_path(doc_id, corpus):
     corpus_path = nltk.data.find("corpora/%s" % corpus)  # unzip reuters.zip first
-    filename = doc_id.replace('/', '\\')
-    path = corpus_path + '\\' + filename
+    path = os.path.join(corpus_path, *doc_id.split('/'))
     return path
 
 
@@ -44,13 +44,15 @@ def fasttext_get_vectors(trained_data, test_data):
     return trained_vector, tested_vector
 
 def get_vectors(model, data):
-    vector = {}
+    vector = []
     for i, doc in enumerate(data):
         print i
+        doc_emb = np.array()
         for j, word in enumerate(tokenize(doc)):
             try:
-                vector[i, j] = model.word_vec(word)
-            except KeyError:
-                vector[i, j] = [0]
-            print vector[i, j]
+                doc_emb = np.vstack(doc_emb, model.word_vec(word))
+            except:
+                pass
+        vector.append(doc.mean(axis=0).tolist())
+
     return vector
