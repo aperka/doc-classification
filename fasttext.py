@@ -8,7 +8,7 @@ from dataset import get_dataset
 from project_utils import tokenize
 import numpy as np
 
-model_path = 'fasttext-model-movie.bin'
+model_path = 'fasttext-model.bin'
 
 def get_path(doc_id, corpus):
     corpus_path = nltk.data.find("corpora/%s" % corpus)  # unzip reuters.zip first
@@ -50,9 +50,11 @@ def get_vectors(model, data):
         doc_emb = []
         for j, word in enumerate(tokenize(doc)):
             try:
-                doc_emb.append(model.word_vec(word))
+                w_vec = model.word_vec(word).tolist()
+                doc_emb.append(w_vec)
             except:
                 pass
-        vector.append(np.array(doc_emb).mean(axis=0).tolist())
+        if len(doc_emb):
+            vector.append(np.array(doc_emb).mean(axis=0).tolist())
 
     return vector

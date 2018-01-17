@@ -57,8 +57,8 @@ def extract_features(method, train_data, test_data, train_docs_ids):
 
     elif method == 'fasttext':
         print("Feature extraction: fasttext")
-        fasttext_train(train_docs_ids, 'movie_reviews')
-        train_data_features, test_data_features = fasttext_get_vectors(test_data)
+        #fasttext_train(train_docs_ids, 'movie_reviews')
+        train_data_features, test_data_features = fasttext_get_vectors(train_data, test_data)
         print(train_data_features)
         print(type(train_data_features))
 
@@ -97,6 +97,6 @@ if __name__ == '__main__':
     else:
         classifier_type = 'svm'  # 'svm' or 'nn'
         feature_extraction = 'fasttext' # 'tf_idf' or'doc2vec' or 'tf_idf_doc2vec' or 'fasttext'
-        dataset_json = 'movie_reviews_dataset.json'
+        dataset_json = 'reuters_dataset.json'
 
     test(classifier_type, feature_extraction, dataset_json)
