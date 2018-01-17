@@ -54,7 +54,10 @@ def get_vectors(model, data):
                 doc_emb.append(w_vec)
             except:
                 pass
-        if len(doc_emb):
-            vector.append(np.array(doc_emb).mean(axis=0).tolist())
+        if not len(doc_emb):
+            print('Empty doc_mb')
+            doc_emb = np.zeros(len(w_vec)).tolist()
+
+        vector.append(np.array(doc_emb).mean(axis=0).tolist())
 
     return vector
