@@ -3,10 +3,11 @@ import json
 from nltk.corpus import reuters
 from nltk.corpus import gutenberg
 from nltk.corpus import brown
+from nltk.corpus import movie_reviews
 from sklearn.preprocessing import MultiLabelBinarizer
 import re
 
-corpuses = dict(reuters=reuters, gutenberg=gutenberg, brown=brown, other=None)
+corpuses = dict(reuters=reuters, gutenberg=gutenberg, brown=brown, movie_reviews=movie_reviews ,other=None)
 
 def create_fasttext_file(inpiut_file_path, output_file_path, corpus_name, cross_validation_case=0):
     with open(file_path, 'r') as f:
@@ -114,6 +115,7 @@ if __name__ == "__main__":
     nltk.download('reuters')
     nltk.download('gutenberg')
     nltk.download('brown')
+    nltk.download('movie_reviews')
 
     if len(sys.argv) == 4:
         corpus_name = sys.argv[1]

@@ -74,7 +74,8 @@ def extract_features(method, train_data, test_data):
 
 
 def test(classifier_type, feature_extraction, dataset_json):
-    for case in range(0, 5):
+    for case in range(1, 5):
+        print('Cross validation case: ' + str(case))
         train_docs, train_bin_labels, test_docs, test_bin_labels, labels = get_dataset(dataset_json, case)
         train_data_features, test_data_features = extract_features(feature_extraction, train_docs, test_docs)
         classify(classifier_type, train_data_features, test_data_features, train_bin_labels, test_bin_labels)
@@ -87,7 +88,7 @@ if __name__ == '__main__':
         dataset_json = sys.argv[3]
     else:
         classifier_type = 'nn'  # 'svm' or 'nn'
-        feature_extraction = 'tf_idf_doc2vec' # 'tf_idf' or'doc2vec' or 'tf_idf_doc2vec'
+        feature_extraction = 'tf_idf' # 'tf_idf' or'doc2vec' or 'tf_idf_doc2vec'
         dataset_json = 'reuters_dataset.json'
 
     test(classifier_type, feature_extraction, dataset_json)
