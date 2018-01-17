@@ -14,7 +14,7 @@ def evaluate(test_labels, predictions):
     print("Precision: {:.4f}, Recall: {:.4f}, F1-measure: {:.4f}".format(precision, recall, f1))
 
 
-def tf_idf_svm(train_docs, test_docs, train_bin_labels, test_bin_labels):
+def tf_idf_svm(train_docs, test_docs, train_bin_labels, test_bin_labels, train_docs_ids):
     svm = SvmClassifier('linear')
     vectorised_train_documents, vectorised_test_documents = tf_idf(train_docs, test_docs)
 
@@ -23,7 +23,7 @@ def tf_idf_svm(train_docs, test_docs, train_bin_labels, test_bin_labels):
 
     evaluate(test_bin_labels, predictions)
 
-def doc2vec_svm(train_docs, test_docs, train_bin_labels, test_bin_labels):
+def doc2vec_svm(train_docs, test_docs, train_bin_labels, test_bin_labels, train_docs_ids):
     svm = SvmClassifier('linear')
     doc2vec_train(train_docs)
     train_data = doc2vec_train(train_docs)
@@ -34,11 +34,21 @@ def doc2vec_svm(train_docs, test_docs, train_bin_labels, test_bin_labels):
 
     evaluate(test_bin_labels, predictions)
 
-def doc2vec_nn(train_docs, test_docs, train_bin_labels, test_bin_labels):
-    doc2vec_train(train_docs)
+def doc2vec_nn(train_docs, test_docs, train_bin_labels, test_bin_labels, train_docs_ids):
     train_data = doc2vec_train(train_docs)
     test_data = doc2vec_gen_test_data(test_docs)
     nn_run(train_data, test_data, train_bin_labels, test_bin_labels, True)
+
+def tf_idf_nn(train_docs, test_docs, train_bin_labels, test_bin_labels, train_docs_ids):
+    vectorised_train_documents, vectorised_test_documents = tf_idf(train_docs, test_docs)
+    train_data = vectorised_train_documents.toarray().tolist()
+    test_data = vectorised_test_documents.toarray().tolist()
+    nn_run(train_data, test_data, train_bin_labels, test_bin_labels, True)
+
+
+def fasttext_nn(train_docs, test_docs, train_bin_labels, test_bin_labels, train_docs_ids):
+    vectorised_train_documents, vectorised_test_documents = fasttext_get_vectors(train_docs, test_docs)
+    nn_run(vectorised_train_documents, vectorised_test_documents, train_bin_labels, test_bin_labels, True)
 
 if __name__ == '__main__':
     import sys
@@ -49,16 +59,16 @@ if __name__ == '__main__':
     from tf_idf import tf_idf
     from svm_classifier import SvmClassifier
     from neural_network import nn_run
-
+    from fasttext import fasttext_get_vectors
     from doc2vec import doc2vec_train, doc2vec_gen_test_data
 
 
     if len(sys.argv) == 2:
         classif_type = sys.argv[1]
-        dataset = sys.argv[2]
     else:
-        classif_type = '2'
+        classif_type = '4'
         dataset = 'reuters_dataset.json'
+
 
 
     if (classif_type == '0'):
@@ -70,8 +80,14 @@ if __name__ == '__main__':
     if (classif_type == '2'):
         print("RUN doc2vec_nn")
         func_name = "doc2vec_nn"
+    if (classif_type == '3'):
+        print("RUN tf_idf_nn")
+        func_name = "tf_idf_nn"
+    if (classif_type == '4'):
+        print("RUN fasstext_nn")
+        func_name = "fasttext_nn"
 
 
-    for case in range(1, 5):
-        train_docs, train_bin_labels, test_docs, test_bin_labels, labels = get_dataset(dataset, case)
-        locals()[func_name](train_docs, test_docs, train_bin_labels, test_bin_labels)
+    for case in range(1, 2):
+        train_docs, train_bin_labels, test_docs, test_bin_labels, labels, train_docs_ids = get_dataset(dataset, case)
+        locals()[func_name](train_docs, test_docs, train_bin_labels, test_bin_labels, train_docs_ids)

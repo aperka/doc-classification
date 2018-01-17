@@ -1,13 +1,16 @@
 from random import randint
 import json
-from nltk.corpus import reuters
-from nltk.corpus import gutenberg
+import re
 from nltk.corpus import brown
 from nltk.corpus import movie_reviews
+
+from nltk.corpus import reuters
 from sklearn.preprocessing import MultiLabelBinarizer
 import re
 
-corpuses = dict(reuters=reuters, gutenberg=gutenberg, brown=brown, movie_reviews=movie_reviews ,other=None)
+
+
+corpuses = dict(reuters=reuters, brown=brown, movie_reviews=movie_reviews, other=None)
 
 def create_fasttext_file(inpiut_file_path, output_file_path, corpus_name, cross_validation_case=0):
     with open(file_path, 'r') as f:
@@ -47,12 +50,18 @@ def save_splitted_dataset(file_path, corpus_name, k):
     """
     corpus = corpuses[corpus_name]
     documents = corpus.fileids()
+
+    print("corpus type:")
+    print(type(corpus))
+
     if (corpus_name == reuters):
-        train_docs_ids = list(filter( lambda doc: doc.startswith("train"), documents))
+        train_docs_ids = list(filter(lambda doc: doc.startswith("train"), documents))
         test_docs_ids = list(filter(lambda doc: doc.startswith("test"), documents))
     else:
         train_docs_ids = documents
         test_docs_ids = []
+
+
     groups = list([] for x in range(k))
 
     while len(train_docs_ids):
@@ -105,17 +114,14 @@ def get_dataset(file_path, cross_validation_case):
     test_bin_labels = mlb.transform([set(corpus.categories(doc_id)) & set(mlb.classes_) for doc_id in test_docs_ids])
     labels = list(mlb.classes_)
 
-    return train_docs, train_bin_labels, test_docs, test_bin_labels, labels
+    return train_docs, train_bin_labels, test_docs, test_bin_labels, labels, train_docs_ids
 
 if __name__ == "__main__":
     import sys
 
-
     import nltk
-    nltk.download('reuters')
-    nltk.download('gutenberg')
-    nltk.download('brown')
-    nltk.download('movie_reviews')
+    #nltk.download('brown')
+    #nltk.download('movie_reviews')
 
     if len(sys.argv) == 4:
         corpus_name = sys.argv[1]
@@ -123,9 +129,10 @@ if __name__ == "__main__":
         file_path = sys.argv[3]
     else:
         print('Loading default configuration')
-        corpus_name = 'reuters'
+        corpus_name = 'movie_reviews'
         num_of_cross_valid_groups = 4
-        file_path = 'reuters_dataset.json'
 
+        file_path = 'movie_reviews_dataset.json'
 
     save_splitted_dataset(file_path, corpus_name, num_of_cross_valid_groups)
+
