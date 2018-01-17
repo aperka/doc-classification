@@ -45,18 +45,19 @@ def fasttext_get_vectors(trained_data, test_data):
 
 def get_vectors(model, data):
     vector = []
-    for i, doc in enumerate(data):
-        print i
+    for doc in data:
+        #print i
         doc_emb = []
-        for j, word in enumerate(tokenize(doc)):
+        for word in tokenize(doc):
             try:
                 w_vec = model.word_vec(word).tolist()
+                #print(len(w_vec))
                 doc_emb.append(w_vec)
             except:
                 pass
         if not len(doc_emb):
-            print('Empty doc_mb')
-            doc_emb = np.zeros(len(w_vec)).tolist()
+            #print('Empty doc_mb')
+            doc_emb = [np.zeros(100).tolist()]
 
         vector.append(np.array(doc_emb).mean(axis=0).tolist())
 
