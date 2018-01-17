@@ -47,6 +47,7 @@ def tf_idf_nn(train_docs, test_docs, train_bin_labels, test_bin_labels, train_do
 
 
 def fasttext_nn(train_docs, test_docs, train_bin_labels, test_bin_labels, train_docs_ids):
+    fasttext_train(train_docs_ids, 'movie_reviews=movie_reviews')
     vectorised_train_documents, vectorised_test_documents = fasttext_get_vectors(train_docs, test_docs)
     nn_run(vectorised_train_documents, vectorised_test_documents, train_bin_labels, test_bin_labels, True)
 
@@ -61,6 +62,7 @@ if __name__ == '__main__':
     from neural_network import nn_run
     from fasttext import fasttext_get_vectors
     from doc2vec import doc2vec_train, doc2vec_gen_test_data
+    from fasttext import fasttext_train
 
 
     if len(sys.argv) == 2:

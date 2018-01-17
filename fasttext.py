@@ -7,7 +7,7 @@ import nltk
 from dataset import get_dataset
 from project_utils import tokenize
 
-model_path = 'fasttext-model.bin'
+model_path = 'fasttext-model-movie.bin'
 
 def get_path(doc_id, corpus):
     corpus_path = nltk.data.find("corpora/%s" % corpus)  # unzip reuters.zip first
@@ -16,7 +16,7 @@ def get_path(doc_id, corpus):
     return path
 
 
-def fasttext(train_docs_ids, corpus):
+def fasttext_train(train_docs_ids, corpus):
     model = FT_gensim(size=100, min_count=1)
     path = get_path(train_docs_ids[0], corpus)
     sentence = LineSentence(path)

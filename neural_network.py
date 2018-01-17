@@ -66,5 +66,8 @@ def nn_run(train_data, test_data, train_bin_labels, test_bin_labels, plot_epoche
         predictions = nn.predict(test_data)
     evaluate(test_bin_labels, predictions)
 
+    return predictions
+
+
 
 
