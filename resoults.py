@@ -35,7 +35,6 @@ def doc2vec_svm(train_docs, test_docs, train_bin_labels, test_bin_labels):
     evaluate(test_bin_labels, predictions)
 
 def doc2vec_nn(train_docs, test_docs, train_bin_labels, test_bin_labels):
-    doc2vec_train(train_docs)
     train_data = doc2vec_train(train_docs)
     test_data = doc2vec_gen_test_data(test_docs)
     nn_run(train_data, test_data, train_bin_labels, test_bin_labels, True)
@@ -61,10 +60,10 @@ if __name__ == '__main__':
 
     if len(sys.argv) == 2:
         classif_type = sys.argv[1]
-        dataset = sys.argv[2]
     else:
-        classif_type = '3'
+        classif_type = '2'
         dataset = 'reuters_dataset.json'
+
 
 
     if (classif_type == '0'):
@@ -81,6 +80,6 @@ if __name__ == '__main__':
         func_name = "tf_idf_nn"
 
 
-    for case in range(1, 5):
+    for case in range(1, 11):
         train_docs, train_bin_labels, test_docs, test_bin_labels, labels = get_dataset(dataset, case)
         locals()[func_name](train_docs, test_docs, train_bin_labels, test_bin_labels)

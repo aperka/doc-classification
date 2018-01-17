@@ -1,19 +1,17 @@
 from gensim.models import Doc2Vec
 from gensim.models.doc2vec import TaggedDocument
 from nltk.tokenize import word_tokenize
-from dataset import get_dataset
-from project_utils import tokenize
+from random import shuffle
 
 doc2vec_model_location = 'doc2vec-model.bin'
-doc2vec_dimensions = 300
+doc2vec_dimensions = 150
 
 
 def doc2vec_train(train_docs):
     taggedDocuments = [TaggedDocument(words=word_tokenize(train_docs[i]), tags=[i]) for i in range(len(train_docs))]
-    #taggedDocuments = [TaggedDocument(words=tokenize(train_docs[i]), tags=[i]) for i in range(len(train_docs))]
-
+    shuffle(taggedDocuments)
     # Create and train the doc2vec model
-    doc2vec = Doc2Vec(size=doc2vec_dimensions, min_count=2, iter=10, workers=12)
+    doc2vec = Doc2Vec(size=doc2vec_dimensions, window=8, min_count=2, iter=20, workers=4, sample=1e-3)
 
     # Build the word2vec model from the corpus
     doc2vec.build_vocab(taggedDocuments)
