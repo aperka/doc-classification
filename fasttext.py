@@ -5,6 +5,9 @@ from gensim.models.fasttext import FastText as FT_gensim
 from nltk.corpus import reuters
 import nltk
 from dataset import get_dataset
+from project_utils import tokenize
+
+model_path = 'fasttext-model.bin'
 
 def get_path(doc_id, corpus):
     corpus_path = nltk.data.find("corpora/%s" % corpus)  # unzip reuters.zip first
@@ -30,12 +33,24 @@ def fasttext(train_docs_ids, corpus):
         # train the model
         model.train(sentence, total_examples=model.corpus_count, epochs=model.iter)
 
-    model.get_vocab_word_vecs()
-    vector = model.wv.syn0
-    print(vector)
+    model.save(model_path)
 
-    model.save('fasttext-model.bin')
 
+
+def fasttext_get_vectors(trained_data, test_data):
+    model = FT_gensim.load(model_path)
+    trained_vector = get_vectors(model, trained_data)
+    tested_vector = get_vectors(model, test_data)
+    return trained_vector, tested_vector
+
+def get_vectors(model, data):
+    vector = {}
+    for i, doc in enumerate(data):
+        print i
+        for j, word in enumerate(tokenize(doc)):
+            try:
+                vector[i, j] = model.word_vec(word)
+            except KeyError:
+                vector[i, j] = [0]
+            print vector[i, j]
     return vector
-
-
